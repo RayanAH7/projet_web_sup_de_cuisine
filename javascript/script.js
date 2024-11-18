@@ -3,6 +3,7 @@ const searchInput = document.querySelector('.search-bar input');
 const ingredientFilter = document.querySelector('.filters select:nth-child(1)');
 const applianceFilter = document.querySelector('.filters select:nth-child(2)');
 const ustensilFilter = document.querySelector('.filters select:nth-child(3)');
+const recipesCount = document.querySelector('.filters span');
 
 let allRecipes = [];
 
@@ -13,10 +14,18 @@ async function fetchRecipes() {
     displayRecipes(allRecipes);
     setupFilters(allRecipes);
     searchInput.addEventListener('input', applyFilters);
+    [ingredientFilter, applianceFilter, ustensilFilter].forEach(filter => {
+        filter.addEventListener('change', applyFilters);
+    });
 }
 
 function displayRecipes(recipes) {
     recipesContainer.innerHTML = '';
+    recipesCount.textContent = `${recipes.length} recette${recipes.length > 1 ? 's' : ''}`;
+    if (recipes.length === 0) {
+        recipesContainer.innerHTML = `<p>Aucune recette ne contient '${searchInput.value}'</p>`;
+        return;
+    }
     recipes.forEach(recipe => {
         const recipeCard = document.createElement('div');
         recipeCard.classList.add('recipe-card');
@@ -62,10 +71,6 @@ function setupFilters(recipes) {
     populateFilter(ingredientFilter, Array.from(ingredients));
     populateFilter(applianceFilter, Array.from(appliances));
     populateFilter(ustensilFilter, Array.from(ustensils));
-
-    [ingredientFilter, applianceFilter, ustensilFilter].forEach(filter => {
-        filter.addEventListener('change', applyFilters);
-    });
 }
 
 function populateFilter(filterElement, options) {
@@ -89,7 +94,7 @@ function applyFilters() {
             recipe.name.toLowerCase().includes(searchQuery) || 
             recipe.description.toLowerCase().includes(searchQuery) || 
             recipe.ingredients.some(ing => ing.ingredient.toLowerCase().includes(searchQuery));
-        const matchesIngredient = !selectedIngredient || recipe.ingredients.some(ing => ing.ingredient.toLowerCase().includes(selectedIngredient));
+        const matchesIngredient = !selectedIngredient || recipe.ingredients.some(ing => ing.ingredient.toLowerCase() === selectedIngredient);
         const matchesAppliance = !selectedAppliance || recipe.appliance.toLowerCase() === selectedAppliance;
         const matchesUstensil = !selectedUstensil || recipe.ustensils.some(ust => ust.toLowerCase().includes(selectedUstensil));
 
