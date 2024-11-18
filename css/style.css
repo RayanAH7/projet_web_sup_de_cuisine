@@ -39,7 +39,7 @@ header h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Ajuste l'opacité pour assombrir l'image de fond */
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
 }
 
@@ -101,21 +101,26 @@ header h1 {
 }
 
 .recipes {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1rem;
     justify-content: center;
-    max-width: 1200px;
     margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
 }
 
 .recipe-card {
-    width: 280px;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-bottom: 1rem;
+    height: auto;
 }
 
 .recipe-card img {
@@ -127,18 +132,68 @@ header h1 {
 .recipe-card h3 {
     font-size: 1.2rem;
     margin: 1rem;
+    color: #333;
+    text-align: center;
 }
 
 .recipe-card .description {
     padding: 0 1rem;
     font-size: 0.9rem;
     color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.recipe-card .details {
+    padding: 1rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.recipe-card .details p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #444;
+    line-height: 1.2;
+}
+
+.recipe-card .details p span {
+    font-weight: bold;
+    color: #333;
 }
 
 .recipe-card .ingredients {
-    padding: 1rem;
-    font-size: 0.8rem;
-    color: #333;
+    margin-top: 0.5rem;
+}
+
+.recipe-card .time,
+.recipe-card .ustensiles,
+.recipe-card .appareil {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+}
+
+.recipe-card .time span,
+.recipe-card .ustensiles span,
+.recipe-card .appareil span {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.recipe-card .ingredients span {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* Responsiveness adjustments */
+@media (max-width: 1024px) {
+    .recipes {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -151,7 +206,15 @@ header h1 {
         align-items: center;
     }
 
+    .recipes {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
     .recipe-card {
         width: 100%;
+    }
+
+    .hero h2 {
+        font-size: 1.5rem;
     }
 }
