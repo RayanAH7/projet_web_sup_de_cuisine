@@ -1,0 +1,57 @@
+<body>
+    <div class="search-bar">
+        <input type="text">
+    </div>
+    <div class="filters">
+        <select>
+            <option value="">Tous</option>
+        </select>
+        <select>
+            <option value="">Tous</option>
+        </select>
+        <select>
+            <option value="">Tous</option>
+        </select>
+        <span>0 recette</span>
+    </div>
+    <div class="recipes"></div>
+
+    <script src="../javascript/script.js"></script>
+    <script>
+        const recipes = [
+            {
+                name: 'Poulet coco réunionnais',
+                description: 'Une recette délicieuse',
+                ingredients: [
+                    { ingredient: 'Poulet', quantity: 1 },
+                    { ingredient: 'Lait de coco', quantity: 400, unit: 'ml' }
+                ],
+                appliance: 'Cocotte',
+                ustensils: ['spatule']
+            },
+            {
+                name: 'Salade de riz',
+                description: 'Recette légère',
+                ingredients: [
+                    { ingredient: 'Riz', quantity: 300, unit: 'g' },
+                    { ingredient: 'Thon', quantity: 200, unit: 'g' }
+                ],
+                appliance: 'Saladier',
+                ustensils: ['fourchette']
+            }
+        ];
+
+        function testApplyFilters() {
+            const searchQuery = '';
+            const selectedIngredient = 'poulet';
+            const selectedAppliance = '';
+            const selectedUstensil = '';
+
+            const result = applyFilters(recipes, searchQuery, selectedIngredient, selectedAppliance, selectedUstensil);
+            console.assert(result.length === 1 && result[0].name === 'Poulet coco réunionnais', 'Test 1 échoué');
+        }
+
+        testApplyFilters();
+        console.log('Tous les tests sont passés.');
+    </script>
+</body>

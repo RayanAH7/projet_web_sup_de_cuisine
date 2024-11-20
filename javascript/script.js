@@ -6,6 +6,7 @@ const ustensilFilter = document.querySelector('.filters select:nth-child(3)');
 const recipesCount = document.querySelector('.filters span');
 
 let allRecipes = [];
+let selectedIngredients = [];
 
 async function fetchRecipes() {
     const response = await fetch('https://gist.githubusercontent.com/baiello/0a974b9c1ec73d7d0ed7c8abc361fc8e/raw/e598efa6ef42d34cc8d7e35da5afab795941e53e/recipes.json');
@@ -14,7 +15,7 @@ async function fetchRecipes() {
     displayRecipes(allRecipes);
     setupFilters(allRecipes);
     searchInput.addEventListener('input', applyFilters);
-    [ingredientFilter, applianceFilter, ustensilFilter].forEach(filter => {
+    [applianceFilter, ustensilFilter].forEach(filter => {
         filter.addEventListener('change', applyFilters);
     });
 }
@@ -71,10 +72,12 @@ function setupFilters(recipes) {
     populateFilter(ingredientFilter, Array.from(ingredients));
     populateFilter(applianceFilter, Array.from(appliances));
     populateFilter(ustensilFilter, Array.from(ustensils));
+
+    ingredientFilter.addEventListener('change', addIngredientTag);
 }
 
 function populateFilter(filterElement, options) {
-    filterElement.innerHTML = '<option value="">Tous</option>';
+    filterElement.innerHTML = '<option value="">Sélectionner</option>';
     options.forEach(option => {
         const opt = document.createElement('option');
         opt.value = option.toLowerCase();
@@ -83,9 +86,44 @@ function populateFilter(filterElement, options) {
     });
 }
 
+function addIngredientTag() {
+    const selectedIngredient = ingredientFilter.value.toLowerCase();
+    if (selectedIngredient && !selectedIngredients.includes(selectedIngredient)) {
+        selectedIngredients.push(selectedIngredient);
+        updateIngredientTags();
+        applyFilters();
+    }
+    ingredientFilter.value = '';
+}
+
+function updateIngredientTags() {
+    const tagContainer = document.querySelector('.filters .tags') || createTagContainer();
+    tagContainer.innerHTML = '';
+    selectedIngredients.forEach(ingredient => {
+        const tag = document.createElement('div');
+        tag.classList.add('tag');
+        tag.textContent = ingredient;
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'X';
+        removeButton.addEventListener('click', () => {
+            selectedIngredients = selectedIngredients.filter(i => i !== ingredient);
+            updateIngredientTags();
+            applyFilters();
+        });
+        tag.appendChild(removeButton);
+        tagContainer.appendChild(tag);
+    });
+}
+
+function createTagContainer() {
+    const tagContainer = document.createElement('div');
+    tagContainer.classList.add('tags');
+    ingredientFilter.parentElement.appendChild(tagContainer);
+    return tagContainer;
+}
+
 function applyFilters() {
     const searchQuery = searchInput.value.toLowerCase();
-    const selectedIngredient = ingredientFilter.value.toLowerCase();
     const selectedAppliance = applianceFilter.value.toLowerCase();
     const selectedUstensil = ustensilFilter.value.toLowerCase();
 
@@ -94,11 +132,13 @@ function applyFilters() {
             recipe.name.toLowerCase().includes(searchQuery) || 
             recipe.description.toLowerCase().includes(searchQuery) || 
             recipe.ingredients.some(ing => ing.ingredient.toLowerCase().includes(searchQuery));
-        const matchesIngredient = !selectedIngredient || recipe.ingredients.some(ing => ing.ingredient.toLowerCase() === selectedIngredient);
+        const matchesIngredients = selectedIngredients.every(ingredient =>
+            recipe.ingredients.some(ing => ing.ingredient.toLowerCase() === ingredient)
+        );
         const matchesAppliance = !selectedAppliance || recipe.appliance.toLowerCase() === selectedAppliance;
         const matchesUstensil = !selectedUstensil || recipe.ustensils.some(ust => ust.toLowerCase().includes(selectedUstensil));
 
-        return matchesSearch && matchesIngredient && matchesAppliance && matchesUstensil;
+        return matchesSearch && matchesIngredients && matchesAppliance && matchesUstensil;
     });
 
     displayRecipes(filteredRecipes);

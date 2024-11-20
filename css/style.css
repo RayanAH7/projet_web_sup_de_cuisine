@@ -104,13 +104,14 @@ header h1 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1rem;
-    justify-content: center;
+    justify-content: left;
     margin: 0 auto;
     width: 100%;
-    max-width: 1200px;
 }
 
 .recipe-card {
+    max-width: 280px;
+    width: 100%;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -121,6 +122,7 @@ header h1 {
     justify-content: flex-start;
     padding-bottom: 1rem;
     height: auto;
+    margin: 0 auto; /* Centre la carte même si elle est seule */
 }
 
 .recipe-card img {
@@ -188,7 +190,33 @@ header h1 {
     margin-bottom: 0.5rem;
 }
 
-/* Responsiveness adjustments */
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    justify-content: start; /* Aligne les tags à gauche */
+}
+
+.tag {
+    background-color: #f7d33d;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tag button {
+    background: none;
+    border: none;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
 @media (max-width: 1024px) {
     .recipes {
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
