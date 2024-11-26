@@ -1,0 +1,22 @@
+{
+    "name": "projet_web_sup_de_cuisine",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+      "test": "jest"
+    },
+    "devDependencies": {
+      "jest": "^29.0.0",
+      "@babel/preset-env": "^7.0.0",
+      "@babel/core": "^7.0.0",
+      "babel-jest": "^29.0.0",
+      "jest-environment-jsdom": "^29.0.0"
+    },
+    "jest": {
+      "testEnvironment": "jsdom",
+      "transform": {
+        "^.+\\.jsx?$": "babel-jest"
+      }
+    }
+  }
+  

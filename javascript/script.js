@@ -1,8 +1,10 @@
+import { filterRecipes } from './utils.js';
+
 const recipesContainer = document.querySelector('.recipes');
 const searchInput = document.querySelector('.search-bar input');
 const searchButton = document.querySelector('.search-bar button');
 const ingredientFilter = document.querySelector('.filters select:nth-child(1)');
-applianceFilter = document.querySelector('.filters select:nth-child(2)');
+const applianceFilter = document.querySelector('.filters select:nth-child(2)');
 const ustensilFilter = document.querySelector('.filters select:nth-child(3)');
 const recipesCount = document.querySelector('.filters span');
 
@@ -18,8 +20,14 @@ async function fetchRecipes() {
     allRecipes = recipes;
     displayRecipes(allRecipes);
     setupFilters(allRecipes);
-    searchInput.addEventListener('input', applyBasicSearch); // Recherche en temps réel
-    searchButton.addEventListener('click', addSearchTag); // Recherche par tag
+    searchInput.addEventListener('input', applyBasicSearch);
+    searchButton.addEventListener('click', addSearchTag);
+}
+
+function applyFilters() {
+    const filteredRecipes = filterRecipes(allRecipes, selectedIngredients, selectedAppliances, selectedUstensils, searchTags);
+    displayRecipes(filteredRecipes);
+    updateFilters(filteredRecipes);
 }
 
 function displayRecipes(recipes) {
@@ -32,7 +40,7 @@ function displayRecipes(recipes) {
     recipes.forEach(recipe => {
         const recipeCard = document.createElement('div');
         recipeCard.classList.add('recipe-card');
-        
+
         const ingredientsList = recipe.ingredients.map(ing => {
             let ingredientString = ing.ingredient;
             if (ing.quantity) {
@@ -55,14 +63,13 @@ function displayRecipes(recipes) {
                 <p class='appareil'><span>Appareil:</span> ${recipe.appliance}</p>
             </div>
         `;
-        
+
         recipesContainer.appendChild(recipeCard);
     });
 }
 
 function setupFilters(recipes) {
     updateFilters(recipes);
-
     ingredientFilter.addEventListener('change', () => addTag(selectedIngredients, ingredientFilter));
     applianceFilter.addEventListener('change', () => addTag(selectedAppliances, applianceFilter));
     ustensilFilter.addEventListener('change', () => addTag(selectedUstensils, ustensilFilter));
@@ -156,30 +163,6 @@ function applyBasicSearch() {
         recipe.ingredients.some(ing => ing.ingredient.toLowerCase().includes(searchQuery))
     );
     displayRecipes(filteredRecipes);
-}
-
-function applyFilters() {
-    const filteredRecipes = allRecipes.filter(recipe => {
-        const matchesIngredients = selectedIngredients.every(ingredient =>
-            recipe.ingredients.some(ing => ing.ingredient.toLowerCase() === ingredient)
-        );
-        const matchesAppliances = selectedAppliances.every(appliance =>
-            recipe.appliance.toLowerCase() === appliance
-        );
-        const matchesUstensils = selectedUstensils.every(ustensil =>
-            recipe.ustensils.some(ust => ust.toLowerCase() === ustensil)
-        );
-        const matchesSearchTags = searchTags.every(tag =>
-            recipe.name.toLowerCase().includes(tag) ||
-            recipe.description.toLowerCase().includes(tag) ||
-            recipe.ingredients.some(ing => ing.ingredient.toLowerCase().includes(tag))
-        );
-
-        return matchesIngredients && matchesAppliances && matchesUstensils && matchesSearchTags;
-    });
-
-    displayRecipes(filteredRecipes);
-    updateFilters(filteredRecipes);
 }
 
 fetchRecipes();

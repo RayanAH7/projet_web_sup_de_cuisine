@@ -71,8 +71,11 @@ header h1 {
 }
 
 .search-bar button {
-    background: none;
-    border: none;
+    background: linear-gradient(to bottom, #f7d33d, #f7d33d);
+    color: white;
+    border: 1px solid #f7d33d;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
     cursor: pointer;
 }
 
@@ -123,17 +126,21 @@ header h1 {
 .recipe-card {
     max-width: 280px;
     width: 100%;
-    background: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    padding: 1rem;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.2);
     text-align: left;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-bottom: 1rem;
     height: auto;
     margin: 0 auto;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.recipe-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .recipe-card img {
@@ -143,7 +150,8 @@ header h1 {
 }
 
 .recipe-card h3 {
-    font-size: 1.2rem;
+    font-family: 'Merriweather', serif;
+    font-size: 1.5rem;
     margin: 1rem;
     color: #333;
     text-align: center;
@@ -157,11 +165,13 @@ header h1 {
 }
 
 .recipe-card .details {
-    padding: 1rem;
+    padding: 1.5rem;
     border-top: 1px solid #eee;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    font-family: 'Merriweather', serif;
+    color: #444;
 }
 
 .recipe-card .details p {
