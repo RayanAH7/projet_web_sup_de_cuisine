@@ -53,7 +53,7 @@ function displayRecipes(recipes) {
         }).join(', ');
 
         recipeCard.innerHTML = `
-            <img src="../images/${recipe.image}" alt="${recipe.name}">
+            <img src="images/${recipe.image}" alt="${recipe.name}">
             <h3>${recipe.name}</h3>
             <p class="description">${recipe.description}</p>
             <div class="details">
